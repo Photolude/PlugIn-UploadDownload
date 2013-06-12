@@ -77,10 +77,8 @@
             <artifactId>maven-jar-plugin</artifactId>
             <version>2.4</version>
             <configuration>
-                <finalName>runnable</finalName>
                 <archive>
                     <manifest>
-                        <mainClass>com.photolude.www.UploadSystem.UploadManager</mainClass>
                         <addClasspath>true</addClasspath>
                         <classpathPrefix>lib/</classpathPrefix>
                     </manifest>
