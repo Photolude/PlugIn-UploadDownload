@@ -3,22 +3,44 @@ package com.photolude.www.dialogs;
 import java.awt.*;
 import javax.swing.*;
 
+/**
+ * A login dialog which asks for email and password
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class LoginDialog
 {
     private String email;
+    /**
+     * Gets the email provided
+     * @return the email address of the user
+     */
     public String getEmail(){return email;}
     
     private String password;
+    /**
+     * Gets the password provided in the dialog
+     * @return the user's password
+     */
     public String getPassword(){return password;}
 
+    /**
+     * Creates a login dialog box and displays it.  The constructor will conclude
+     * when the dialog is complete.
+     */
     public LoginDialog() {
         getIDandPassword();
     }
 
     // modal dialog to get user ID and password
-    static String[] ConnectOptionNames = { "Login", "Cancel" };
-    static String   ConnectTitle = "Login";
-    void getIDandPassword()
+    static final String[] ConnectOptionNames = { "Login", "Cancel" };
+    static final String   ConnectTitle = "Login";
+    
+    /**
+     * Constructs and displays the login dialog box
+     */
+    private void getIDandPassword()
     {
         JPanel      connectionPanel;
 	

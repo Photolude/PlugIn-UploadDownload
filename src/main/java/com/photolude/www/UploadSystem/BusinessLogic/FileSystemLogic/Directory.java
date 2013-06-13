@@ -7,6 +7,12 @@ import java.util.Hashtable;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
+/**
+ * This object defines a directory object which can be used by the UI
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class Directory {
 	public static Image FolderImage;
 	public static Image PicturesImage;

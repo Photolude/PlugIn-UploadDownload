@@ -8,48 +8,59 @@ import javax.swing.JComponent;
 
 import com.photolude.www.UploadSystem.Styles;
 
-
+/**
+ * This is a UI component which draws a string at a specific size with a
+ * specific font
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class UILabel extends JComponent implements ComponentListener {
 
-	private String m_strText;
-	private Font m_fFont;
-	private Dimension m_dimPreferedSize;
+	private String text;
+	private Font font;
+	private Dimension preferedSize;
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public UILabel(String strText)
+	/**
+	 * Creates a UI Label with the specified text
+	 * @param strText the string to be rendered
+	 */
+	public UILabel(String text)
 	{
-		m_strText = strText;
-		m_fFont = Styles.TitleFont;
+		this.text = text;
+		this.font = Styles.TitleFont;
 		this.addComponentListener(this);
 		this.setAlignmentX(JComponent.LEFT_ALIGNMENT);
 	}
 	
-	public UILabel(String strText, Font fFont)
+	/**
+	 * Creates a Label with the specified text and font
+	 * @param text the text to draw
+	 * @param font the font to use
+	 */
+	public UILabel(String text, Font font)
 	{
-		m_strText = strText;
-		m_fFont = fFont;
+		this.text = text;
+		this.font = font;
 		this.addComponentListener(this);
-		//Dimension size = new Dimension(800, 25);
-		//this.setMaximumSize(size);
-		//this.setMinimumSize(size);
-		//this.setPreferredSize(size);
+
 		this.setAlignmentX(JComponent.LEFT_ALIGNMENT);
 	}
 	
 	public void paint(Graphics g) 
 	{
-		//g.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
-		g.setFont(m_fFont);
-		g.drawString(m_strText, 0, this.getHeight() * 2 / 3);
+		g.setFont(this.font);
+		g.drawString(this.text, 0, this.getHeight() * 2 / 3);
 		
-		if(null == m_dimPreferedSize)
+		if(null == preferedSize)
 		{
 			this.setAlignmentX(JComponent.LEFT_ALIGNMENT);
-			m_dimPreferedSize = UIHelper.SetSizeBasedOnString(g, m_fFont, m_strText, this, 0);
+			preferedSize = UIHelper.SetSizeBasedOnString(g, this.font, this.text, this, 0);
 		}
 	}
 

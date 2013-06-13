@@ -1,5 +1,11 @@
 package com.photolude.UI.Common;
 
+/**
+ * Defines a listener for folder selection events
+ * 
+ * @author Nikody Keating
+ *
+ */
 public interface IFolderSelectionListener {
 	/**
 	 * This function gets called when a folder is selected

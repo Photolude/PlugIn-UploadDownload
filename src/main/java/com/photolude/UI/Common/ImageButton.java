@@ -5,6 +5,12 @@ import java.awt.event.*;
 
 import javax.swing.JComponent;
 
+/**
+ * Defines a button which leverages images to render
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class ImageButton extends JComponent implements ComponentListener, MouseListener {
 
 	/**

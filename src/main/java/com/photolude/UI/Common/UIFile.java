@@ -11,7 +11,12 @@ import javax.swing.JComponent;
 
 import com.photolude.www.UploadSystem.Styles;
 
-
+/**
+ * Defines the UI Element representing a file
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class UIFile extends JComponent implements ItemListener, Runnable, ISelectable {
 	private static final long serialVersionUID = 1L;
 

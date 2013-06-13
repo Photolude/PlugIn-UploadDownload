@@ -6,7 +6,12 @@ import javax.swing.JComponent;
 
 import com.photolude.www.UploadSystem.Styles;
 
-
+/**
+ * Represents a separator line and text
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class Seperator extends JComponent {
 	private static final long serialVersionUID = 1L;
 	private String title;

@@ -2,6 +2,12 @@ package com.photolude.www.UploadSystem;
 
 import java.awt.*;
 
+/**
+ * A class which contains a static set of fonts and colors
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class Styles {
 	
 	public static Font TitleFont = new Font("SansSerif", 0, 20);

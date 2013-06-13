@@ -3,13 +3,28 @@ package com.photolude.UI.Common;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * This class is a helper class for UI utilities
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class UIHelper {
-	public static Dimension SetSizeBasedOnString(Graphics g, Font fFont, String string, Component component, int nPaddingX)
+	/**
+	 * Gets the dimensions of a string
+	 * @param g a graphics object
+	 * @param font the font to use
+	 * @param string the string to measure
+	 * @param component the component which is being drawn to
+	 * @param paddingX the padding on the x axis
+	 * @return
+	 */
+	public static Dimension SetSizeBasedOnString(Graphics g, Font font, String string, Component component, int paddingX)
 	{
 		Graphics2D graphics2D = (Graphics2D)g;
 		
-		Rectangle2D rect = fFont.getStringBounds(string, graphics2D.getFontRenderContext());
-		Dimension retval = new Dimension((int)rect.getWidth() + nPaddingX, (int)rect.getHeight());
+		Rectangle2D rect = font.getStringBounds(string, graphics2D.getFontRenderContext());
+		Dimension retval = new Dimension((int)rect.getWidth() + paddingX, (int)rect.getHeight());
 		
 		component.setMaximumSize(retval);
 		component.setMinimumSize(retval);
@@ -27,6 +42,16 @@ public class UIHelper {
 		return retval;
 	}
 	
+	/**
+	 * Draws a gradient
+	 * @param g the graphics object to use to draw with
+	 * @param x the left position
+	 * @param y the top position
+	 * @param width with width of the gradient
+	 * @param height the height of the gradient
+	 * @param color1 the first color of the gradient
+	 * @param color2 the second color of the gradient
+	 */
 	public static void DrawGradient(Graphics g, int x, int y, int width, int height, Color color1, Color color2)
 	{
 		Graphics2D graphics2D = (Graphics2D)g;

@@ -9,7 +9,12 @@ import javax.swing.JComponent;
 import com.photolude.www.UploadSystem.Styles;
 import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.Directory;
 
-
+/**
+ * This is a UI component which represents an image folder
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class LargeImageFolder extends JComponent implements MouseListener, ISelectable {
 	private static final long serialVersionUID = 1L;
 	
