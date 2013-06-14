@@ -6,7 +6,12 @@ import java.awt.Graphics;
 
 import com.photolude.www.UploadSystem.Styles;
 
-
+/**
+ * The loading progress bar
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class ProgressBar extends Container {
 	private static final long serialVersionUID = 1L;
 
@@ -14,6 +19,9 @@ public class ProgressBar extends Container {
 	private int m_nTotalSteps = 1;
 	private String m_sStatus = "";
 	
+	/**
+	 * Paints the progress bar
+	 */
 	public void paint(Graphics g) {
 		int nDrawingWidth = this.getWidth() - 1;
 		g.setColor(Color.darkGray);
@@ -26,16 +34,28 @@ public class ProgressBar extends Container {
 		g.drawString(m_sStatus, 2, 72);
 	}
 	
+	/**
+	 * Sets the status to draw
+	 * @param sNewStatus the new status to draw
+	 */
 	public void SetStatus(String sNewStatus)
 	{
 		this.m_sStatus = sNewStatus;
 	}
 	
+	/**
+	 * The total number of steps for the progress bar
+	 * @param nTotalSteps the total steps
+	 */
 	public void SetTotalSteps(int nTotalSteps)
 	{
 		this.m_nTotalSteps = nTotalSteps;
 	}
 	
+	/**
+	 * The current step which the process is on
+	 * @param nOnStep the current step number
+	 */
 	public void SetOnStep(int nOnStep)
 	{
 		this.m_nOnStep = nOnStep;

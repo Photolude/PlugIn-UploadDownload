@@ -5,15 +5,23 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.w3c.dom.*;
-
-
+/**
+ * Generates a manifest for the specified set of files
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class Manifest {
 	private File[] files;
 	private HashMap<File, String> m_mapDestinations;
 	private int m_nFolderCount;
 	private String m_userName;
 
+	/**
+	 * Creates a manifest for the specified files
+	 * @param files the files which are to include in the manifest
+	 * @param userName the user to associate with the manifest
+	 */
 	public Manifest(File[] files, String userName) {
 		this.files = files;
 		this.m_userName = userName;
@@ -38,10 +46,19 @@ public class Manifest {
 		this.m_nFolderCount = folderList.size();
 	}
 
+	/**
+	 * Gets the number of unique folders
+	 * @return the number of unique folders
+	 */
 	public int GetFolderCount() {
 		return this.m_nFolderCount;
 	}
 
+	/**
+	 * Gets the remote path which identifies this file remotely
+	 * @param file the file object to get the remote path
+	 * @return a string representing the relative remote processing path
+	 */
 	public String GetRemotePath(File file) {
 		String retval = null;
 		if (m_mapDestinations.containsKey(file)) {
@@ -49,36 +66,12 @@ public class Manifest {
 		}
 		return retval;
 	}
-
-	public String FindDateTaken(Node node) {
-		String retval = null;
-		NamedNodeMap map = node.getAttributes();
-		int length = map.getLength();
-
-		for (int i = 0; i < length && retval == null; i++) {
-			Node attribute = map.item(i);
-			String attributeName = attribute.getNodeName();
-			if (attributeName == "DateTaken") {
-				retval = attribute.getNodeValue();
-			}
-		}
-
-		Node child = node.getFirstChild();
-
-		while (child != null && retval == null) {
-			retval = FindDateTaken(child);
-
-			child = child.getNextSibling();
-		}
-
-		return retval;
-	}
-
-	private String UriEncode(String value)
-	{
-		return value.replace("&", "%26");
-	}
 	
+	/**
+	 * Saves the manifest as a file
+	 * @param outputFile the path where to safe the file
+	 * @return true if we were able to save the file
+	 */
 	public Boolean Save(String outputFile) {
 		Boolean retval = true;
 		try {
@@ -106,5 +99,10 @@ public class Manifest {
 		}
 
 		return retval;
+	}
+	
+	private String UriEncode(String value)
+	{
+		return value.replace("&", "%26");
 	}
 }

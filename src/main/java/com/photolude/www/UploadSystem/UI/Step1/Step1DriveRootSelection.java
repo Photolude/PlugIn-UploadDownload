@@ -13,7 +13,12 @@ import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.Directory;
 import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.FileSystemAnalyzer;
 
 
-
+/**
+ * The step 1 screen
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class Step1DriveRootSelection extends JComponent implements IFolderSelectionListener {
 	/**
 	 * 

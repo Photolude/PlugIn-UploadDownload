@@ -74,8 +74,7 @@ public class UploadManager extends Applet implements IFolderSelectionListener, I
 		loadingScreen.Start();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see com.photolude.UI.Common.IFolderSelectionListener#OnFolderSelected(com.photolude.UI.Common.LargeImageFolder)
 	 */
 	@Override
@@ -93,8 +92,7 @@ public class UploadManager extends Applet implements IFolderSelectionListener, I
 		this.repaint();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see com.photolude.www.UploadSystem.UI.Step2.IStep2Listener#Step2_Complete(java.io.File[])
 	 */
 	@Override
@@ -107,8 +105,7 @@ public class UploadManager extends Applet implements IFolderSelectionListener, I
 		this.validate();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see com.photolude.www.UploadSystem.UI.Step2.IStep2Listener#Step2_Back()
 	 */
 	@Override
@@ -123,8 +120,7 @@ public class UploadManager extends Applet implements IFolderSelectionListener, I
 		this.validate();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see com.photolude.www.UploadSystem.UI.Step3.IUploadStatusListener#UploadStatus_UploadComplete()
 	 */
 	@Override
@@ -134,8 +130,7 @@ public class UploadManager extends Applet implements IFolderSelectionListener, I
 		this.validate();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see com.photolude.UI.Common.IFolderSelectionListener#OnFolderExpanded(com.photolude.UI.Common.LargeImageFolder)
 	 */
 	@Override
@@ -143,8 +138,7 @@ public class UploadManager extends Applet implements IFolderSelectionListener, I
 		// Do nothing
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * @see com.photolude.www.UploadSystem.UI.Loading.ILoadingListener#LoadingCompleted()
 	 */
 	@Override

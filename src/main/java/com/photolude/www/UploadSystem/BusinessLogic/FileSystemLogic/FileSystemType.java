@@ -3,7 +3,7 @@ package com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic;
 /**
  * File system types definition
  * 
- * @author Nikody
+ * @author Nikody Keating
  *
  */
 public enum FileSystemType {

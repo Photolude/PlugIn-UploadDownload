@@ -20,7 +20,12 @@ import com.photolude.www.UploadSystem.Styles;
 import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.Directory;
 import com.photolude.www.UploadSystem.UI.Step1.*;
 
-
+/**
+ * The screen which shows a progress bar and loads web resources
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class LoadingScreen extends JComponent implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private ProgressBar m_progressBar;
@@ -30,6 +35,11 @@ public class LoadingScreen extends JComponent implements Runnable {
 	private Applet m_applet;
 	private List<ILoadingListener> m_listeners;
 
+	/**
+	 * Creates a loading screen and registers resources which are to be loaded
+	 * @param applet the applet the loader is attached to
+	 * @param m_server the server to download the images from
+	 */
 	public LoadingScreen(Applet applet, String m_server)
 	{
 		this.m_applet = applet;
@@ -69,6 +79,11 @@ public class LoadingScreen extends JComponent implements Runnable {
         this.add(Step1DriveRootSelection.AlignLeft(new UILabel("Please wait while the upload manager prepairs itself.", Styles.NormalFont)));
 	}
 	
+	/**
+	 * Adds a listener for the loading screen
+	 * 
+	 * @param listener the listener to add
+	 */
 	public void AddListener(ILoadingListener listener)
 	{
 		if(!this.m_listeners.contains(listener))
@@ -77,12 +92,18 @@ public class LoadingScreen extends JComponent implements Runnable {
 		}
 	}
 	
+	/**
+	 * Starts the loading process
+	 */
 	public void Start()
 	{
 		Thread thread = new Thread(this);
 		thread.start();
 	}
 
+	/**
+	 * The loading thread function
+	 */
 	@Override
 	public void run() {
 		Set<ImageList> keys = this.m_itemsToLoad.keySet();

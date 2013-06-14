@@ -5,7 +5,7 @@ import java.io.*;
  * Analises the file system and provides access to general concepts on the file system
  * across multiple systems
  * 
- * @author Nikody
+ * @author Nikody Keating
  *
  * TODO: Add support for Linux
  * TODO: Add support for Apple

@@ -21,8 +21,7 @@ import com.photolude.www.WebClient.PlainTextResult;
 /**
  * This class performs the actual upload business logic
  * 
- * @author Nikody
- *
+ * @author Nikody Keating
  */
 public class UploadFilesLogic {
 	private String uploadToken;
