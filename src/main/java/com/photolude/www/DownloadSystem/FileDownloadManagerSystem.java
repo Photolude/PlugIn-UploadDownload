@@ -11,7 +11,13 @@ import org.apache.log4j.Logger;
 import com.photolude.www.UploadSystem.UI.Loading.ProgressBar;
 import com.photolude.www.WebClient.HttpSessionClient;
 
-
+/**
+ * This object is an applet designed to be used by a webpage to download
+ * a specified number of images to a specified directory
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class FileDownloadManagerSystem extends Applet implements Runnable {
 	private int[] imageIds = null;
 	private String destination = null;

@@ -18,19 +18,29 @@ import org.json.JSONObject;
 import com.photolude.www.WebClient.IHttpSessionClient;
 import com.photolude.www.WebClient.PlainTextResult;
 
-
+/**
+ * This class performs the actual upload business logic
+ * 
+ * @author Nikody
+ *
+ */
 public class UploadFilesLogic {
 	private String uploadToken;
 	private Manifest manifest;
 	private File[] files;
 	private int finishedUploads;
-	IHttpSessionClient client;
+	private IHttpSessionClient client;
 	private String uploadPage;
 	private String statusPage;
 	private String logonPage;
 	private IUploadFilesListener listener;
 	
 	private int onStep;
+	
+	/**
+	 * Gets the percentage complete
+	 * @return a value between 0 and 1
+	 */
 	public double getPercentComplete()
 	{
 		double retval = 0;
@@ -47,8 +57,22 @@ public class UploadFilesLogic {
 	}
 	
 	private String uploadStatus;
+	/**
+	 * Gets the upload status text
+	 * @return
+	 */
 	public String getUploadStatusText(){return uploadStatus;}
 	
+	/**
+	 * Creates an instance of the object with the specified settings
+	 * @param userName the user name to use
+	 * @param files the files to upload
+	 * @param uploadPage the webpage which is used to upload to
+	 * @param statusPage the webpage which is used to retrieve upload & processing status
+	 * @param logonPage the webpage which is used to log-in
+	 * @param client the session based http client
+	 * @param listener a listener to events which occur during processing
+	 */
 	public UploadFilesLogic(String userName, File[] files, String uploadPage, String statusPage, String logonPage, IHttpSessionClient client, IUploadFilesListener listener)
 	{
 		this.uploadPage = uploadPage;
@@ -66,6 +90,9 @@ public class UploadFilesLogic {
 		this.listener = listener;
 	}
 	
+	/**
+	 * Upload the files to the server
+	 */
 	public void UploadFiles()
 	{
 		this.finishedUploads = 1;
@@ -158,6 +185,43 @@ public class UploadFilesLogic {
 			}
 		}
 	}
+	
+	/**
+	 * Performs a log on with the specified values
+	 * @param userName the user name to logon with
+	 * @param password the password to logon with
+	 */
+	public void LogOn(String userName, String password)
+	{
+		JSONObject requestData = new JSONObject();
+		try {
+			requestData.put("email", userName);
+			requestData.put("password", password);
+			
+			HttpResponse response = this.client.postJSON(this.logonPage, requestData);
+			
+			JSONObject jsonResponse = convertResponseToJSON(response);
+			if(jsonResponse != null)
+			{
+				String result = jsonResponse.getString("result");
+				if(result == "Access Denied")
+				{
+					//TODO: Show message box
+				}
+				else if(result != "Succeeded")
+				{
+					//TODO: Show login failed
+				}
+			}
+			else
+			{
+				//TODO: Notify that could not connect to the server
+			}
+		} catch (JSONException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private boolean UploadFile(File file)
 	{
 		
@@ -268,37 +332,6 @@ public class UploadFilesLogic {
 			logger.warn("Status code was not 200 (actual: " + response.getStatusLine().getStatusCode() + ").  Not converting to json object");
 		}
 		return jsonResponse;
-	}
-	public void LogOn(String userName, String password)
-	{
-		JSONObject requestData = new JSONObject();
-		try {
-			requestData.put("email", userName);
-			requestData.put("password", password);
-			
-			HttpResponse response = this.client.postJSON(this.logonPage, requestData);
-			
-			JSONObject jsonResponse = convertResponseToJSON(response);
-			if(jsonResponse != null)
-			{
-				String result = jsonResponse.getString("result");
-				if(result == "Access Denied")
-				{
-					//TODO: Show message box
-				}
-				else if(result != "Succeeded")
-				{
-					//TODO: Show login failed
-				}
-			}
-			else
-			{
-				//TODO: Notify that could not connect to the server
-			}
-			
-		} catch (JSONException | IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void SetStatus(String newStatus, int onStep)

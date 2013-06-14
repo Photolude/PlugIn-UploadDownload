@@ -93,19 +93,19 @@ public class LoadingScreen extends JComponent implements Runnable {
 		//
 		ArrayList<Image> imageList = new ArrayList<Image>();
 		try {
-			Directory.FolderImage = this.m_applet.getImage(new URL(this.m_sFolderImage));
+			Directory.setFolderImage(this.m_applet.getImage(new URL(this.m_sFolderImage)));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		imageList.add(Directory.FolderImage);
+		imageList.add(Directory.getFolderImage());
 		this.m_progressBar.SetOnStep(++nOnStep);
 		
 		try {
-			Directory.PicturesImage = this.m_applet.getImage(new URL(this.m_sPictureImage));
+			Directory.setPicturesImage(this.m_applet.getImage(new URL(this.m_sPictureImage)));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		imageList.add(Directory.PicturesImage);
+		imageList.add(Directory.getPicturesImage());
 		this.m_progressBar.SetOnStep(++nOnStep);
 		
 		ImageDictionary dictionary = ImageDictionary.GetInstance();

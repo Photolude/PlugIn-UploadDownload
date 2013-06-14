@@ -14,9 +14,29 @@ import javax.swing.filechooser.*;
  *
  */
 public class Directory {
-	public static Image FolderImage;
-	public static Image PicturesImage;
-	public static Image FileImage;
+	private static Image folderImage;
+	/**
+	 * Gets the image used for displaying folders
+	 * @return an Image object
+	 */
+	public static Image getFolderImage(){ return folderImage; }
+	/**
+	 * Sets the image used to display folders
+	 * @param value the image to set
+	 */
+	public static void setFolderImage(Image value){ folderImage = value; }
+	
+	public static Image picturesImage;
+	/**
+	 * Gets the image used for pictures
+	 * @return an image object
+	 */
+	public static Image getPicturesImage(){ return picturesImage; }
+	/**
+	 * Sets the image to be used for pictures
+	 * @param value an image object
+	 */
+	public static void setPicturesImage(Image value){ picturesImage = value; }
 	
 	public String Name;
 	public String Path;
@@ -27,6 +47,10 @@ public class Directory {
 	
 	private File file;
 	
+	/**
+	 * Creates a directory object based off a java file object
+	 * @param file the object representing the physical directory located on disc
+	 */
 	public Directory(File file)
 	{
 		this.file = file;
@@ -42,7 +66,7 @@ public class Directory {
 			
 			if(IconImage == null)
 			{
-				Image = PicturesImage;
+				Image = picturesImage;
 			}
 		}
 		else if(Description == null || Description.equalsIgnoreCase("File Folder"))
@@ -51,7 +75,7 @@ public class Directory {
 			
 			if(IconImage == null)
 			{
-				Image = FolderImage;
+				Image = folderImage;
 			}
 		}
 		if(Name.equalsIgnoreCase(""))
@@ -61,6 +85,9 @@ public class Directory {
 		}
 	}
 	
+	/**
+	 * Gets the display name
+	 */
 	public String toString()
 	{
 		String retval;
@@ -77,6 +104,10 @@ public class Directory {
 		return retval;
 	}
 
+	/**
+	 * Gets the subdirectory for the current directory
+	 * @return an array of subdirectories
+	 */
 	public Directory[] GetSubdirectories() {
 		ArrayList<File> filesList = new ArrayList<File>();
 		File[] fileArray = this.file.listFiles();
@@ -102,18 +133,11 @@ public class Directory {
 		return retval;
 	}
 	
-	private static String GetFileExtension(String fileName)
-	{
-		String retval = "";
-		String[] parts = fileName.split("\\.");
-		
-		if(parts.length > 1)
-		{
-			retval = parts[parts.length - 1];
-		}
-		return retval;
-	}
-	
+	/**
+	 * Gets the files based off of the masking limitations
+	 * @param mask the mask to limit the file search by
+	 * @return all the files in the current directory which match the file mask
+	 */
 	public File[] GetFiles(String mask)
 	{
 		String[] masks = mask.split("\\|");
@@ -153,7 +177,23 @@ public class Directory {
 		return retval;
 	}
 
+	/**
+	 * Checks to see if the directory still exists
+	 * @return true if the directory exists
+	 */
 	public boolean Exists() {
 		return this.file.exists();
+	}
+	
+	private static String GetFileExtension(String fileName)
+	{
+		String retval = "";
+		String[] parts = fileName.split("\\.");
+		
+		if(parts.length > 1)
+		{
+			retval = parts[parts.length - 1];
+		}
+		return retval;
 	}
 }

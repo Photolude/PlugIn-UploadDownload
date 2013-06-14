@@ -2,19 +2,20 @@ package com.photolude.www.UploadSystem.BusinessLogic.FileUploading;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.w3c.dom.*;
 
 
 public class Manifest {
-	private File[] m_files;
+	private File[] files;
 	private HashMap<File, String> m_mapDestinations;
 	private int m_nFolderCount;
 	private String m_userName;
 
 	public Manifest(File[] files, String userName) {
-		this.m_files = files;
+		this.files = files;
 		this.m_userName = userName;
 		this.m_mapDestinations = new HashMap<File, String>();
 
@@ -84,16 +85,15 @@ public class Manifest {
 			FileOutputStream stream = new FileOutputStream(outputFile);
 
 			stream.write(String.format("<manifest username=\"%s\">", UriEncode(this.m_userName)).getBytes());
-			for (int i = 0; i < this.m_files.length; i++) {
-				ImageMetadata metadata = new ImageMetadata(this.m_files[i]);
-
+			for (File file : this.files)
+			{
 				String outputLine = String
 						.format("<file name=\"%s\" remote=\"%s\" path=\"%s\" createddate=\"%s\" modifieddate=\"%s\" />",
-								        UriEncode(metadata.GetName()), 
-								        UriEncode(this.m_mapDestinations.get(this.m_files[i])), 
-								        UriEncode(this.m_files[i].getAbsolutePath()), 
-								        metadata.GetCreatedDate().toString(), 
-								        metadata.GetModifiedDate().toString());
+								        UriEncode(file.getName()), 
+								        UriEncode(this.m_mapDestinations.get(file)), 
+								        UriEncode(file.getAbsolutePath()), 
+								        (new Date(file.lastModified())).toString(), 
+								        (new Date(file.lastModified())).toString());
 
 				stream.write(outputLine.getBytes());
 			}
