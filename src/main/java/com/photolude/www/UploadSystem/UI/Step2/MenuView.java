@@ -10,11 +10,13 @@ import javax.swing.*;
 import com.photolude.UI.Common.ImageButton;
 import com.photolude.www.UploadSystem.*;
 
-
+/**
+ * The menu view for step 2
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class MenuView extends JComponent implements MouseListener {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private ArrayList<IMenuViewListener> m_alListeners;
 	private ImageButton m_ibAddSelected;
@@ -27,6 +29,9 @@ public class MenuView extends JComponent implements MouseListener {
 		m_alListeners = new ArrayList<IMenuViewListener>();
 	}
 	
+	/**
+	 * Initializes the menu view
+	 */
 	public void Initialize()
 	{
 		int nControlPanelWidth = 0;
@@ -76,11 +81,19 @@ public class MenuView extends JComponent implements MouseListener {
 		
 	}
 
+	/**
+	 * Adds a listener to the menu
+	 * 
+	 * @param listener the new listener
+	 */
 	public void AddMenuViewListener(IMenuViewListener listener)
 	{
 		m_alListeners.add(listener);
 	}
 	
+	/**
+	 * Gets called when a mouse is clicked over this view
+	 */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		Object source = arg0.getSource();
@@ -129,6 +142,10 @@ public class MenuView extends JComponent implements MouseListener {
 		
 	}
 	
+	/**
+	 * Sets the add button either enabled or disabled
+	 * @param bEnabled true is enabled, false is disabled
+	 */
 	public void SetAddSelectedEnabled(Boolean bEnabled)
 	{
 		if(bEnabled)
@@ -141,6 +158,10 @@ public class MenuView extends JComponent implements MouseListener {
 		}
 	}
 	
+	/**
+	 * Sets the remove button as either enabled or disabled
+	 * @param bEnabled true is enabled, false is disabled
+	 */
 	public void SetRemoveSelectedEnabled(Boolean bEnabled)
 	{
 		if(bEnabled)
@@ -153,6 +174,10 @@ public class MenuView extends JComponent implements MouseListener {
 		}
 	}
 	
+	/**
+	 * Sets the upload all button either enabled or disabled
+	 * @param bEnabled true is enabled, false is disabled
+	 */
 	public void SetUploadAllEnabled(Boolean bEnabled)
 	{
 		if(bEnabled)

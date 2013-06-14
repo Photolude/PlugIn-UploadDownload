@@ -13,12 +13,12 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import com.photolude.UI.Common.ComponentHelper;
 import com.photolude.UI.Common.UILabel;
 import com.photolude.www.UploadSystem.ImageDictionary;
 import com.photolude.www.UploadSystem.ImageList;
 import com.photolude.www.UploadSystem.Styles;
 import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.Directory;
-import com.photolude.www.UploadSystem.UI.Step1.*;
 
 /**
  * The screen which shows a progress bar and loads web resources
@@ -74,9 +74,9 @@ public class LoadingScreen extends JComponent implements Runnable {
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		this.add(Step1DriveRootSelection.AlignLeft(new UILabel("Loading")));
+		this.add(ComponentHelper.AlignLeft(new UILabel("Loading")));
 		this.add(this.m_progressBar);
-        this.add(Step1DriveRootSelection.AlignLeft(new UILabel("Please wait while the upload manager prepairs itself.", Styles.NormalFont)));
+        this.add(ComponentHelper.AlignLeft(new UILabel("Please wait while the upload manager prepairs itself.", Styles.NormalFont)));
 	}
 	
 	/**

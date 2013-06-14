@@ -30,7 +30,13 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
 
-
+/**
+ * Defines a http session client, which can be used to communicate with the server
+ * leveraging a specific user session.
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class HttpSessionClient implements IHttpSessionClient {
 	private DefaultHttpClient client;
 	private BasicCookieStore cookieStore = new BasicCookieStore();
@@ -62,6 +68,12 @@ public class HttpSessionClient implements IHttpSessionClient {
 		cookieStore.addCookies(cookies);
 	}
 	
+	/**
+	 * Downloads an image from the specified url to a destination directory
+	 * @param source the source url
+	 * @param destinationDirectory the destination to download to
+	 * @return returns the file name which was downloaded based off of meta-data recieved from the server
+	 */
 	public String downloadImage(String source, String destinationDirectory)
 	{
 		initializeNewConnection();

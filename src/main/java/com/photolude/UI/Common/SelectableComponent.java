@@ -1,15 +1,18 @@
-package com.photolude.www.UploadSystem.UI.Step2;
+package com.photolude.UI.Common;
 
 import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
-import com.photolude.UI.Common.IFolderSelectionListener;
-import com.photolude.UI.Common.ISelectable;
-import com.photolude.UI.Common.LargeImageFolder;
+import com.photolude.www.UploadSystem.UI.Step2.ISelectableComponentListener;
 
-
+/**
+ * Defines a panel which has select-able elements in it
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class SelectableComponent extends JPanelAdv implements MouseListener, IFolderSelectionListener {
 
 	/**
@@ -26,6 +29,9 @@ public class SelectableComponent extends JPanelAdv implements MouseListener, IFo
 		m_jpPanel.addMouseListener(this);
 	}
 	
+	/**
+	 * Resets all select-able objects as unselected
+	 */
 	public void ResetSelectedObjects()
 	{
 		for(int i = 0; i < m_jpPanel.getComponentCount(); i++)
@@ -41,6 +47,9 @@ public class SelectableComponent extends JPanelAdv implements MouseListener, IFo
 		m_nSelectedObjects = 0;
 	}
 	
+	/**
+	 * Occurs when a mouse is clicked on this object
+	 */
 	@Override
 	public void mouseClicked(MouseEvent meMouseEvent) {
 		Object source = meMouseEvent.getSource();
@@ -138,6 +147,9 @@ public class SelectableComponent extends JPanelAdv implements MouseListener, IFo
 		}
 	}
 
+	/**
+	 * Occurs when a mouse enters this object
+	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		if(ISelectable.class.isAssignableFrom(e.getSource().getClass()))
@@ -146,6 +158,9 @@ public class SelectableComponent extends JPanelAdv implements MouseListener, IFo
 		}
 	}
 
+	/**
+	 * Occurs when a mouse exits this object
+	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
 		if(ISelectable.class.isAssignableFrom(e.getSource().getClass()))
@@ -154,23 +169,35 @@ public class SelectableComponent extends JPanelAdv implements MouseListener, IFo
 		}
 	}
 
+	/**
+	 * Occurs when the mouse button is pressed
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
+	/**
+	 * Occurs when the mouse button is released
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
+	/**
+	 * Adds a listener to this component
+	 * 
+	 * @param listener the new listener to add
+	 */
 	public void AddSelectedComponentListener(ISelectableComponentListener listener)
 	{
 		m_listeners.add(listener);
 	}
 
+	/**
+	 * Fires the event for folders being selected
+	 * 
+	 * @param lifFolder the folder which was selected
+	 */
 	private void FireFolderSelected(LargeImageFolder lifFolder)
 	{
 		for(int i = 0; i < m_listeners.size(); i++)
@@ -179,6 +206,9 @@ public class SelectableComponent extends JPanelAdv implements MouseListener, IFo
 		}
 	}
 
+	/**
+	 * Gets called by a child object when a large folder is selected
+	 */
 	@Override
 	public void OnFolderSelected(LargeImageFolder source) {
 		if(!m_bSupportFolders)
@@ -187,6 +217,9 @@ public class SelectableComponent extends JPanelAdv implements MouseListener, IFo
 		}
 	}
 
+	/**
+	 * Gets called by a child object when a large folder is expanded
+	 */
 	@Override
 	public void OnFolderExpanded(LargeImageFolder source) {
 		FireFolderSelected(source);

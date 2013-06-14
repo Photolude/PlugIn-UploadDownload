@@ -12,11 +12,13 @@ import com.photolude.www.UploadSystem.BusinessLogic.FileUploading.UploadFilesLog
 import com.photolude.www.WebClient.HttpSessionClient;
 import com.photolude.www.dialogs.LoginDialog;
 
-
+/**
+ * The status object used to display meaningful status to the user during the upload process
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class UploadStatus extends Container implements Runnable, IUploadFilesListener {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public static String UserName;
@@ -32,6 +34,11 @@ public class UploadStatus extends Container implements Runnable, IUploadFilesLis
 	
 	private UploadFilesLogic logic;
 	
+	/**
+	 * Initializes this object with files to be uploaded, and starts the upload thread
+	 * 
+	 * @param files the files to be uploaded
+	 */
 	public UploadStatus(File[] files)
 	{
 		this.logic = new UploadFilesLogic(UserName, files, UploadPage, StatusPage, LogonPage, new HttpSessionClient(Token, Authentication, Domain), this);
@@ -42,11 +49,19 @@ public class UploadStatus extends Container implements Runnable, IUploadFilesLis
 		m_tThread.start();
 	}
 
+	/**
+	 * Adds a listener to this object
+	 * 
+	 * @param listener the new listener to add
+	 */
 	public void AddUploadStatusListener(IUploadStatusListener listener)
 	{
 		m_listeners.add(listener);
 	}
 	
+	/**
+	 * Paints this object to the screen
+	 */
 	public void paint(Graphics g) {
 		int nDrawingWidth = this.getWidth() - 100;
 		g.setColor(Color.darkGray);
@@ -59,6 +74,9 @@ public class UploadStatus extends Container implements Runnable, IUploadFilesLis
 		g.drawString(this.logic.getUploadStatusText(), 52, 122);
 	}
 	
+	/**
+	 * The thread which is uploading files
+	 */
 	@Override
 	public void run() {
 		this.validate();
@@ -74,12 +92,18 @@ public class UploadStatus extends Container implements Runnable, IUploadFilesLis
 		}
 	}
 
+	/**
+	 * Gets invoked if the user needs to re-log into the system
+	 */
 	@Override
 	public void RequireLogOn() {
 		LoginDialog dialog = new LoginDialog();
 		this.logic.LogOn(dialog.getEmail(), dialog.getPassword());
 	}
 
+	/**
+	 * Gets invoked when the upload status changes
+	 */
 	@Override
 	public void StatusChanged() {
 		this.repaint();

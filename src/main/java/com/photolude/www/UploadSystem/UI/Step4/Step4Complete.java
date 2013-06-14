@@ -11,15 +11,18 @@ import javax.swing.JComponent;
 import com.photolude.UI.Common.*;
 import com.photolude.www.UploadSystem.Styles;
 
-
+/**
+ * The view which informs the user that the upload process has completed
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class Step4Complete extends JComponent implements Runnable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private AppletContext context;
 	private Thread thread;
+	
 	public Step4Complete(AppletContext context)
 	{
 		this.context = context;
@@ -32,6 +35,9 @@ public class Step4Complete extends JComponent implements Runnable {
 		this.thread.start();
 	}
 	
+	/**
+	 * Navigates to the recent pictures of the webpage
+	 */
 	private void NavigateToPictures()
 	{
 		try
@@ -44,6 +50,9 @@ public class Step4Complete extends JComponent implements Runnable {
 		}
 	}
 
+	/**
+	 * Waits for a specified period of time before automatically redirecting the user to the recently uploaded pictures
+	 */
 	@Override
 	public void run() {
 		try {

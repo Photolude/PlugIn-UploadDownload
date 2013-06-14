@@ -62,6 +62,9 @@ public class Step2SelectFolder extends JComponent implements IMenuViewListener, 
 		this.add(jpLowerArea);
 	}
 
+	/**
+	 * Called when the add button is pressed on the menu
+	 */
 	@Override
 	public void OnAddSelected() {
 		File[] files = m_compNavigationView.GetSelectedObjects();
@@ -76,6 +79,9 @@ public class Step2SelectFolder extends JComponent implements IMenuViewListener, 
 		m_compMenuView.SetAddSelectedEnabled(false);
 	}
 
+	/**
+	 * Called when the upload all button is pressed on the menu
+	 */
 	@Override
 	public void OnUploadAll() {
 		
@@ -91,13 +97,40 @@ public class Step2SelectFolder extends JComponent implements IMenuViewListener, 
 			}
 		}
 	}
-
+	
+	/**
+	 * Called when the remove button is pressed on the menu
+	 */
 	@Override
-	public void LargeFolderClick(LargeImageFolder lifFolder) {
-		// TODO Auto-generated method stub
+	public void OnRemoveSelected() {
+		m_compManifestView.RemoveSelected();
+		m_compMenuView.SetRemoveSelectedEnabled(false);
 		
+		m_compMenuView.SetUploadAllEnabled(m_compManifestView.GetFileCount() > 0);
 	}
 
+	/**
+	 * Called when the back button is pressed on the menu
+	 */
+	@Override
+	public void OnBack() {
+		for(int i = 0; i < m_listeners.size(); i++)
+		{
+			m_listeners.get(i).Step2_Back();
+		}
+	}
+
+	/**
+	 * Gets called when a large folder is clicked
+	 */
+	@Override
+	public void LargeFolderClick(LargeImageFolder lifFolder) {
+		// Do nothing
+	}
+
+	/**
+	 * Gets called when items are selected by either the navigation or the manifest views
+	 */
 	@Override
 	public void ItemsSelected(Object source, int nCount) {
 		if(source == m_compNavigationView)
@@ -109,23 +142,11 @@ public class Step2SelectFolder extends JComponent implements IMenuViewListener, 
 			m_compMenuView.SetRemoveSelectedEnabled(nCount > 0);
 		}
 	}
-
-	@Override
-	public void OnRemoveSelected() {
-		m_compManifestView.RemoveSelected();
-		m_compMenuView.SetRemoveSelectedEnabled(false);
-		
-		m_compMenuView.SetUploadAllEnabled(m_compManifestView.GetFileCount() > 0);
-	}
-
-	@Override
-	public void OnBack() {
-		for(int i = 0; i < m_listeners.size(); i++)
-		{
-			m_listeners.get(i).Step2_Back();
-		}
-	}
 	
+	/**
+	 * Adds a listener to this object
+	 * @param listener
+	 */
 	public void AddStep2Listeners(IStep2Listener listener)
 	{
 		m_listeners.add(listener);

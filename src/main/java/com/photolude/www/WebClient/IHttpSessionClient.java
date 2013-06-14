@@ -6,6 +6,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
 
+/**
+ * Defines a http session client interface
+ * 
+ * @author Nikody Keating
+ *
+ */
 public interface IHttpSessionClient {
 	
 	/**

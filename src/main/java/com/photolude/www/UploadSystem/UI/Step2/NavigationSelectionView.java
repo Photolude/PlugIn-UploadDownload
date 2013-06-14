@@ -10,7 +10,12 @@ import com.photolude.UI.Common.*;
 import com.photolude.www.UploadSystem.Styles;
 import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.Directory;
 
-
+/**
+ * This is the file system view which is used to display the users local files
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class NavigationSelectionView extends SelectableComponent implements ISelectableComponentListener {
 	private static final long serialVersionUID = 1L;
 	private static String s_strFileMask = "png|jpg|bmp|gif|jpeg|JPG";
@@ -18,6 +23,10 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 	
 	private JPanel m_jpNavigationPanel;
 	
+	/**
+	 * Initializes the navigation based on a specific directory
+	 * @param directory the directory to show as the root
+	 */
 	public void Initialize(Directory directory)
 	{
 		this.m_bSupportFolders = true;
@@ -69,6 +78,10 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 		this.add(jspScrollArea);
 	}
 
+	/**
+	 * Gets the selected files in this view
+	 * @return the files selected
+	 */
 	public File[] GetSelectedObjects()
 	{
 		ArrayList<File> arrayList = new ArrayList<File>();
@@ -105,41 +118,9 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 		return retval;
 	}
 	
-	private File[] GetFilesFromDirectory(Directory dir)
-	{
-		ArrayList<File> arrayList = new ArrayList<File>();
-		
-		Directory[] directories = dir.GetSubdirectories();
-		
-		for(int i = 0; i < directories.length; i++)
-		{
-			File[] files = GetFilesFromDirectory(directories[i]);
-			
-			for(int ii = 0; ii < files.length; ii++)
-			{
-				arrayList.add(files[ii]);
-			}
-		}
-		
-		File[] files = dir.GetFiles(s_strFileMask);
-		
-		if(files != null)
-		{
-			for(int i = 0; i < files.length; i++)
-			{
-				arrayList.add(files[i]);
-			}
-		}
-		
-		File[] retval = new File[arrayList.size()];
-		for(int i = 0; i < retval.length; i++)
-		{
-			retval[i] = arrayList.get(i);
-		}
-		
-		return retval;
-	}
-	
+	/**
+	 * Handles large folder click events
+	 */
 	@Override
 	public void LargeFolderClick(LargeImageFolder lifFolder)
 	{
@@ -205,6 +186,9 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 		this.getParent().validate();
 	}
 	
+	/**
+	 * Unloads this object to ensure there are no threads running in the background
+	 */
 	public void Unload()
 	{
 		for(int i = 0; i < m_jpNavigationPanel.getComponentCount(); i++)
@@ -218,10 +202,45 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 		}
 	}
 
-
+	/**
+	 * Occurs when items are selected
+	 */
 	@Override
 	public void ItemsSelected(Object Source, int nCount) {
-		// TODO Auto-generated method stub
+	}
+	
+	private File[] GetFilesFromDirectory(Directory dir)
+	{
+		ArrayList<File> arrayList = new ArrayList<File>();
 		
+		Directory[] directories = dir.GetSubdirectories();
+		
+		for(int i = 0; i < directories.length; i++)
+		{
+			File[] files = GetFilesFromDirectory(directories[i]);
+			
+			for(int ii = 0; ii < files.length; ii++)
+			{
+				arrayList.add(files[ii]);
+			}
+		}
+		
+		File[] files = dir.GetFiles(s_strFileMask);
+		
+		if(files != null)
+		{
+			for(int i = 0; i < files.length; i++)
+			{
+				arrayList.add(files[i]);
+			}
+		}
+		
+		File[] retval = new File[arrayList.size()];
+		for(int i = 0; i < retval.length; i++)
+		{
+			retval[i] = arrayList.get(i);
+		}
+		
+		return retval;
 	}
 }

@@ -8,20 +8,26 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
+import com.photolude.UI.Common.SelectableComponent;
 import com.photolude.UI.Common.UIFile;
 import com.photolude.UI.Common.UILabel;
 import com.photolude.www.UploadSystem.Styles;
 
-
+/**
+ * Defines a UI component which will display the manifest
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class ManifestView extends SelectableComponent {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static int s_ControlPanelHeight = 80;
 	private JScrollPane m_spScrollArea;
 	
+	/**
+	 * Initializes the Manifest view
+	 */
 	public void Initialize()
 	{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -39,6 +45,10 @@ public class ManifestView extends SelectableComponent {
 		this.add(m_spScrollArea);
 	}
 	
+	/**
+	 * Adds files to the manifest
+	 * @param files
+	 */
 	public synchronized void AddManifestItems(File[] files) 
 	{
 		m_jpPanel.remove(m_jpPanel.getComponentCount() - 1);
@@ -73,6 +83,9 @@ public class ManifestView extends SelectableComponent {
 		this.validate();
 	}
 	
+	/**
+	 * Removes the selected files in the manifest
+	 */
 	public void RemoveSelected()
 	{
 		for(int i = m_jpPanel.getComponentCount() - 1; i >= 0 ; i--)
@@ -91,6 +104,10 @@ public class ManifestView extends SelectableComponent {
 		repaint();
 	}
 	
+	/**
+	 * Gets all the files in the manifest
+	 * @return
+	 */
 	public File[] GetItems()
 	{
 		File[] retval = new File[GetFileCount()];
@@ -107,11 +124,18 @@ public class ManifestView extends SelectableComponent {
 		return retval;
 	}
 	
+	/**
+	 * Gets the number of items in the manifest
+	 * @return the file count
+	 */
 	public int GetFileCount()
 	{
 		return m_jpPanel.getComponentCount() - 1;
 	}
 	
+	/**
+	 * Unloads the manifest view
+	 */
 	public void Unload()
 	{
 		for(int i = m_jpPanel.getComponentCount() - 1; i >= 0 ; i--)

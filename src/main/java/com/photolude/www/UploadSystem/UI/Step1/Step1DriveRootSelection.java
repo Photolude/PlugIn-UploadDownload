@@ -1,9 +1,9 @@
 package com.photolude.www.UploadSystem.UI.Step1;
 
-import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
+import com.photolude.UI.Common.ComponentHelper;
 import com.photolude.UI.Common.IFolderSelectionListener;
 import com.photolude.UI.Common.LargeImageFolder;
 import com.photolude.UI.Common.Seperator;
@@ -31,8 +31,8 @@ public class Step1DriveRootSelection extends JComponent implements IFolderSelect
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		// Dynamically calculate size information
         Directory[] userDirectories = FileSystemAnalyzer.GetInstance().GetUserFolders();
-        this.add(AlignLeft(new UILabel("Instructions:")));
-        this.add(AlignLeft(new UILabel("Select where your photos are located.", Styles.NormalFont)));
+        this.add(ComponentHelper.AlignLeft(new UILabel("Instructions:")));
+        this.add(ComponentHelper.AlignLeft(new UILabel("Select where your photos are located.", Styles.NormalFont)));
         
         this.add(new Seperator("User Folders"));
         if(userDirectories != null)
@@ -61,30 +61,35 @@ public class Step1DriveRootSelection extends JComponent implements IFolderSelect
         this.add(Box.createVerticalGlue());
 	}
 	
-	public static Component AlignLeft(JComponent component)
-	{
-		component.setAlignmentX(Component.LEFT_ALIGNMENT);
-		return component;
-	}
-
+	/**
+	 * Adds a listener for when folders are selected
+	 * @param listener the new listener to add
+	 */
 	public void AddFolderSelectionListener(IFolderSelectionListener listener)
 	{
 		listeners.add(listener);
 	}
 	
+	/**
+	 * Invokes listener events
+	 */
 	@Override
 	public void OnFolderSelected(LargeImageFolder source) 
 	{
-		for(int i = 0; i < listeners.size(); i++)
+		for(IFolderSelectionListener listener : listeners)
 		{
-			listeners.get(i).OnFolderSelected(source);
+			listener.OnFolderSelected(source);
 		}
 	}
 
+	/**
+	 * Invokes listener events
+	 */
 	@Override
 	public void OnFolderExpanded(LargeImageFolder source) {
-		// TODO Auto-generated method stub
-		
+		for(IFolderSelectionListener listener : listeners)
+		{
+			listener.OnFolderExpanded(source);
+		}
 	}
-
 }

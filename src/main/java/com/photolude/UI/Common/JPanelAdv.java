@@ -1,7 +1,13 @@
-package com.photolude.www.UploadSystem.UI.Step2;
+package com.photolude.UI.Common;
 
 import javax.swing.*;
 
+/**
+ * Defines an advanced panel which can be used to offer specific functionality around child component information
+ * 
+ * @author Nikody Keating
+ *
+ */
 public class JPanelAdv extends JComponent {
 	/**
 	 * 
@@ -15,6 +21,11 @@ public class JPanelAdv extends JComponent {
 		m_jpPanel = new JPanel();
 	}
 
+	/**
+	 * Gets the child component's index offset
+	 * @param component the component to find
+	 * @return the index of the specified component
+	 */
 	protected int GetComponentOffset(JComponent component)
 	{
 		int retval = -1;
