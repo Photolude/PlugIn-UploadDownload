@@ -14,6 +14,8 @@ import org.json.JSONObject;
  */
 public interface IHttpSessionClient {
 	
+	public IHttpSessionClient setSessionCookies(String domain, String sessionToken, String authentication);
+	
 	/**
 	 * downloads an image to the destination directory
 	 * @param source the http source url

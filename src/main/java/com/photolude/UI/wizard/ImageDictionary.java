@@ -1,4 +1,4 @@
-package com.photolude.www.UploadSystem;
+package com.photolude.UI.wizard;
 
 import java.awt.Image;
 import java.util.HashMap;
@@ -12,14 +12,13 @@ import java.util.Map;
  */
 public class ImageDictionary {
 	private static ImageDictionary instance = null;
-	private Map<ImageList,Image> dictionary;
+	private Map<String, Image> dictionary = new HashMap<String,Image>();
 	
 	/**
 	 * This constructor is private in order to ensure this object is a singleton
 	 */
 	private ImageDictionary()
 	{
-		dictionary = new HashMap<ImageList,Image>();
 	}
 	
 	/**
@@ -42,7 +41,7 @@ public class ImageDictionary {
 	 * @param image the image which is to be indexed
 	 * @return the image which was added
 	 */
-	public Image Add(ImageList key, Image image)
+	public Image add(String key, Image image)
 	{
 		dictionary.put(key, image);
 		return image;
@@ -53,7 +52,7 @@ public class ImageDictionary {
 	 * @param key the enum key value which references a specific image
 	 * @return the image object. If the image is not indexed then null is returned
 	 */
-	public Image Get(ImageList key)
+	public Image Get(String key)
 	{
 		return dictionary.get(key);
 	}

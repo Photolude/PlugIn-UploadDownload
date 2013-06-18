@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 import com.photolude.UI.Common.*;
+import com.photolude.UI.wizard.ImageDictionary;
 import com.photolude.www.UploadSystem.Styles;
 import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.Directory;
+import com.photolude.www.UploadSystem.UI.Step1.Step1DriveRootSelection;
 
 /**
  * This is the file system view which is used to display the users local files
@@ -44,7 +46,7 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 		m_jpNavigationPanel.setMaximumSize(new Dimension(nWidth, 1200000));
 		m_jpNavigationPanel.setMinimumSize(new Dimension(nWidth, 10));
 		
-		LargeImageFolder rootFolder = new LargeImageFolder(directory, 0);
+		LargeImageFolder rootFolder = new LargeImageFolder(directory, ImageDictionary.GetInstance().Get(Step1DriveRootSelection.FOLDER_TOKEN), 0);
 		m_jpNavigationPanel.add(rootFolder);
 		rootFolder.validate();
 		
@@ -54,7 +56,7 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 		{
 			for(int i = 0; i < subDirectories.length; i++)
 			{
-				LargeImageFolder folder= new LargeImageFolder(subDirectories[i], s_nOffsetStep);
+				LargeImageFolder folder= new LargeImageFolder(subDirectories[i], ImageDictionary.GetInstance().Get(Step1DriveRootSelection.FOLDER_TOKEN), s_nOffsetStep);
 				folder.setAlignmentX(JComponent.LEFT_ALIGNMENT);
 				folder.addMouseListener(this);
 				m_jpNavigationPanel.add(folder);
@@ -136,7 +138,7 @@ public class NavigationSelectionView extends SelectableComponent implements ISel
 			{
 				for(int i = 0; i < directories.length; i++)
 				{
-					LargeImageFolder lifSubDir = new LargeImageFolder(directories[i], lifFolder.GetLeftOffset() + s_nOffsetStep);
+					LargeImageFolder lifSubDir = new LargeImageFolder(directories[i], ImageDictionary.GetInstance().Get(Step1DriveRootSelection.FOLDER_TOKEN), lifFolder.GetLeftOffset() + s_nOffsetStep);
 					lifSubDir.addMouseListener(this);
 					m_jpNavigationPanel.add(lifSubDir, offset + i);
 				}

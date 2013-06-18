@@ -22,13 +22,15 @@ public class LargeImageFolder extends JComponent implements MouseListener, ISele
 	private Directory directory;
 	private int leftOffset;
 	private Dimension m_dSize;
+	private Image image;
 	
 	private Boolean m_bIsMouseOver = false;
 	private Boolean m_bIsSelected = false;
 	private Boolean m_bIsExpanded = false;
 	
-	public LargeImageFolder(Directory directory)
+	public LargeImageFolder(Directory directory, Image image)
 	{
+		this.image = image;
 		this.directory = directory;
 		this.leftOffset = 0;
 
@@ -36,9 +38,9 @@ public class LargeImageFolder extends JComponent implements MouseListener, ISele
 		this.setAlignmentX(LEFT_ALIGNMENT);
 	}
 	
-	public LargeImageFolder(Directory directory, int leftOffset)
+	public LargeImageFolder(Directory directory, Image image, int leftOffset)
 	{
-		this(directory);
+		this(directory, image);
 		this.leftOffset = leftOffset;
 	}
 	
@@ -102,8 +104,8 @@ public class LargeImageFolder extends JComponent implements MouseListener, ISele
 		}
 		else if(directory.Image != null)
 		{
-			int imageY = (getHeight() / 2) - (directory.Image.getHeight(null) / 2);
-			g.drawImage(directory.Image, leftOffset, imageY, null);
+			int imageY = (getHeight() / 2) - (this.image.getHeight(null) / 2);
+			g.drawImage(this.image, leftOffset, imageY, null);
 		}
 		
 		g.setColor(Styles.FolderFontColor);

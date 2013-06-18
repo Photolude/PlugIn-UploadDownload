@@ -41,17 +41,8 @@ public class HttpSessionClient implements IHttpSessionClient {
 	private DefaultHttpClient client;
 	private BasicCookieStore cookieStore = new BasicCookieStore();
 	
-	/**
-	 * Creates an instance of a session based http client
-	 * @param sessionToken the session token
-	 * @param authentication the authentication token
-	 * @param domain the domain to hook up to
-	 */
-	public HttpSessionClient(String sessionToken, String authentication, String domain)
+	public IHttpSessionClient setSessionCookies(String domain, String sessionToken, String authentication)
 	{
-		HttpContext localContext = new BasicHttpContext();
-		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-		
 		Cookie[] cookies = new Cookie[(authentication == null)? 1 : 2];
 		
 		BasicClientCookie sessionCookie = new BasicClientCookie("ASP.NET_SessionId", sessionToken);
@@ -66,6 +57,20 @@ public class HttpSessionClient implements IHttpSessionClient {
 		}
 		
 		cookieStore.addCookies(cookies);
+		
+		return this;
+	}
+	
+	/**
+	 * Creates an instance of a session based http client
+	 * @param sessionToken the session token
+	 * @param authentication the authentication token
+	 * @param domain the domain to hook up to
+	 */
+	public HttpSessionClient()
+	{
+		HttpContext localContext = new BasicHttpContext();
+		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 	}
 	
 	/**

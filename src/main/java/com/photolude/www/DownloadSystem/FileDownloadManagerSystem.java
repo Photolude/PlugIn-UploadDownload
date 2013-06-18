@@ -6,7 +6,6 @@ import javax.swing.JFileChooser;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
 
 import com.photolude.www.UploadSystem.UI.Loading.ProgressBar;
 import com.photolude.www.WebClient.HttpSessionClient;
@@ -38,10 +37,6 @@ public class FileDownloadManagerSystem extends Applet implements Runnable {
 
 	public void init()
 	{
-		Logger log = Logger.getLogger(FileDownloadManagerSystem.class);
-		
-		log.info("Loading download system\n");
-		
 		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(layout);
 		
@@ -57,7 +52,6 @@ public class FileDownloadManagerSystem extends Applet implements Runnable {
 			//
 			// Parse parameters into type safe values
 			//
-			log.info("Getting parameters\n");
 			String imageIdsString = getParameter("ImageIds");
 			this.source = getParameter("Source");
 			this.cookie = getParameter("Cookie");
@@ -65,7 +59,6 @@ public class FileDownloadManagerSystem extends Applet implements Runnable {
 			
 			if(imageIdsString != null)
 			{
-				log.info("Parsing Image Ids\n");
 				String[] imageIdsParts = imageIdsString.split(",");
 				imageIds = new int[imageIdsParts.length];
 				
@@ -75,7 +68,6 @@ public class FileDownloadManagerSystem extends Applet implements Runnable {
 				}
 			}
 			
-			log.info("Setting Layout\n");
 			//
 			// Setup layout and start download
 			//
@@ -104,8 +96,8 @@ public class FileDownloadManagerSystem extends Applet implements Runnable {
 			progressBar.SetStatus("Downloading " + (i + 1) + " of " + (imageIds.length));
 			progressBar.SetOnStep(i);
 			
-			HttpSessionClient client = new HttpSessionClient(this.cookie, this.auth, this.source);
-			
+			HttpSessionClient client = new HttpSessionClient();
+			client.setSessionCookies(this.cookie, this.auth, this.source);
 			String fileName = client.downloadImage("https://" + source + "/Content/ImageRender.ashx?imageId=" + imageIds[i] + "&large=true&Save=true", this.destination);
 			
 			if(fileName != null)

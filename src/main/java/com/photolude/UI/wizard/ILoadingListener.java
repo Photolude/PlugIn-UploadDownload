@@ -1,4 +1,4 @@
-package com.photolude.www.UploadSystem.UI.Loading;
+package com.photolude.UI.wizard;
 
 /**
  * Defines a listener for the loading screen

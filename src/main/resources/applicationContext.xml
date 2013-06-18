@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+ 
+    <bean id="httpClient" class="com.photolude.www.WebClient.HttpSessionClient"/>
+    
+    <bean id="Step4" class="com.photolude.www.UploadSystem.UI.Step4.Step4Complete"/>
+    <bean id="Step3" class="com.photolude.www.UploadSystem.UI.Step3.Step3Upload">
+        <property name="nextPage" >
+            <ref bean="Step4"/>
+        </property>
+        <property name="httpClient">
+            <ref bean="httpClient"/>
+        </property>
+    </bean>
+    <bean id="Step2" class="com.photolude.www.UploadSystem.UI.Step2.Step2SelectFolder">
+        <property name="nextPage" >
+            <ref bean="Step3"/>
+        </property>
+    </bean>
+    <bean id="Step1" class="com.photolude.www.UploadSystem.UI.Step1.Step1DriveRootSelection">
+        <property name="nextPage" >
+            <ref bean="Step2"/>
+        </property>    
+    </bean>
+	<bean id="Wizard" class="com.photolude.UI.wizard.JWizard">
+		<property name="firstPage" >
+			<ref bean="Step1"/>
+		</property>
+	</bean>
+</beans>

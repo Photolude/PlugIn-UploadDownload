@@ -11,8 +11,6 @@ import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.log4j.Logger;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.photolude.www.WebClient.IHttpSessionClient;
@@ -27,12 +25,15 @@ public class UploadFilesLogic {
 	private String uploadToken;
 	private Manifest manifest;
 	private File[] files;
+	public void setFiles(File[] files){ this.files = files; }
+	public File[] getFiles(){ return this.files; }
 	private int finishedUploads;
 	private IHttpSessionClient client;
 	private String uploadPage;
 	private String statusPage;
 	private String logonPage;
 	private IUploadFilesListener listener;
+	private String userName;
 	
 	private int onStep;
 	
@@ -72,7 +73,7 @@ public class UploadFilesLogic {
 	 * @param client the session based http client
 	 * @param listener a listener to events which occur during processing
 	 */
-	public UploadFilesLogic(String userName, File[] files, String uploadPage, String statusPage, String logonPage, IHttpSessionClient client, IUploadFilesListener listener)
+	public UploadFilesLogic(String userName, String uploadPage, String statusPage, String logonPage, IHttpSessionClient client, IUploadFilesListener listener)
 	{
 		this.uploadPage = uploadPage;
 		this.statusPage = statusPage;
@@ -80,9 +81,7 @@ public class UploadFilesLogic {
 		
 		this.onStep = 0;
 		
-		this.manifest = new Manifest(files, userName);
-		
-		this.files = files;
+		this.userName = userName;
 		this.uploadStatus = "Prepairing to Upload";
 		
 		this.client = client;
@@ -96,6 +95,7 @@ public class UploadFilesLogic {
 	{
 		this.finishedUploads = 1;
 		
+		this.manifest = new Manifest(this.files, this.userName);
 		//
 		// Create temporary manifest file for upload
 		//
@@ -134,7 +134,7 @@ public class UploadFilesLogic {
 						try {
 							this.uploadToken = json.getString("token");
 							bManifestUploaded = true;
-						} catch (JSONException e) {
+						} catch (Exception e) {
 						}
 					}
 			    	
@@ -216,7 +216,7 @@ public class UploadFilesLogic {
 			{
 				//TODO: Notify that could not connect to the server
 			}
-		} catch (JSONException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -248,7 +248,7 @@ public class UploadFilesLogic {
 					fileUploaded = true;
 					try {
 						this.uploadToken = json.getString("token");
-					} catch (JSONException e) {
+					} catch (Exception e) {
 						fileUploaded = false;
 					}
 				}
@@ -303,7 +303,6 @@ public class UploadFilesLogic {
 	
 	private JSONObject convertResponseToJSON(HttpResponse response)
 	{
-		Logger logger = Logger.getLogger(this.getClass());
 		JSONObject jsonResponse = null;
 		if(response != null && response.getStatusLine().getStatusCode() == 200)
 		{
@@ -320,16 +319,13 @@ public class UploadFilesLogic {
 				}
 			
 				jsonResponse = new JSONObject(contents.toString().trim());
-			} catch (JSONException e) {
-				logger.error(e.toString());
 			} catch (IOException e1) {
-				logger.error(e1.toString());
+				e1.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-		else if(response != null)
-		{
-			logger.warn("Status code was not 200 (actual: " + response.getStatusLine().getStatusCode() + ").  Not converting to json object");
-		}
+		
 		return jsonResponse;
 	}
 	

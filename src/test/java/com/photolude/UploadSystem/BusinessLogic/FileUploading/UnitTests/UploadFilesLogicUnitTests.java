@@ -9,7 +9,7 @@ public class UploadFilesLogicUnitTests {
 	@Test
 	public void ConstructNullFiles()
 	{
-		UploadFilesLogic unitUnderTest = new UploadFilesLogic(null, null, null, null, null, null, null);
+		UploadFilesLogic unitUnderTest = new UploadFilesLogic(null, null, null, null, null, null);
 		
 		double percent = unitUnderTest.getPercentComplete();
 		String statusText = unitUnderTest.getUploadStatusText();

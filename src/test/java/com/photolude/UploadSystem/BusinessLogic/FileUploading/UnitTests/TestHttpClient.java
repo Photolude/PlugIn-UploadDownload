@@ -38,4 +38,10 @@ public class TestHttpClient implements IHttpSessionClient {
 		return this.postJSON_Result;
 	}
 
+	@Override
+	public IHttpSessionClient setSessionCookies(String domain,
+			String sessionToken, String authentication) {
+		return this;
+	}
+
 }

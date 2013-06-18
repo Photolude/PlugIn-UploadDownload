@@ -50,6 +50,7 @@ public class ProgressBar extends Container {
 	public void SetTotalSteps(int nTotalSteps)
 	{
 		this.m_nTotalSteps = nTotalSteps;
+		this.repaint();
 	}
 	
 	/**

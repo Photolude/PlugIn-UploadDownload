@@ -1,11 +1,15 @@
 package com.photolude.www.UploadSystem.UI.Step3;
+import java.applet.Applet;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 
 import com.photolude.UI.Common.UILabel;
+import com.photolude.UI.wizard.WizardPageBase;
+import com.photolude.www.UploadSystem.UI.Step2.IUploadPage;
+import com.photolude.www.WebClient.IHttpSessionClient;
 
 /**
  * Step 3 in the upload wizard, which uploads the files to the server
@@ -13,39 +17,28 @@ import com.photolude.UI.Common.UILabel;
  * @author Nikody Keating
  *
  */
-public class Step3Upload extends JComponent implements IUploadStatusListener {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private ArrayList<IUploadStatusListener> m_listeners;
+@SuppressWarnings("serial")
+public class Step3Upload extends WizardPageBase implements IUploadStatusListener, IUploadPage {
+	
+	private UploadStatus uploadStatus;
+	
+	public void setHttpClient(IHttpSessionClient client){ this.uploadStatus.setHttpClient(client); }
+	public IHttpSessionClient getHttpClient(){ return this.uploadStatus.getHttpClient(); }
 	
 	/**
 	 * Initializes the object with the files to be uploaded 
 	 * @param fFiles
 	 */
-	public Step3Upload(File[] fFiles)
+	public Step3Upload()
 	{
-		m_listeners = new ArrayList<IUploadStatusListener>();
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		this.add(new Step3Menu());
 		this.add(new UILabel("Uploading Files"));
 		
-		UploadStatus uploadStatus = new UploadStatus(fFiles);
+		this.uploadStatus = new UploadStatus();
 		uploadStatus.AddUploadStatusListener(this);
 		this.add(uploadStatus);
-	}
-	
-	/**
-	 * Adds a listener to this object
-	 * 
-	 * @param listener the new listener to add
-	 */
-	public void AddUploadStatusListener(IUploadStatusListener listener)
-	{
-		m_listeners.add(listener);
 	}
 	
 	/**
@@ -53,9 +46,26 @@ public class Step3Upload extends JComponent implements IUploadStatusListener {
 	 */
 	public void UploadStatus_UploadComplete()
 	{
-		for(int i = 0; i < m_listeners.size(); i++)
-		{
-			m_listeners.get(i).UploadStatus_UploadComplete();
-		}
+		this.firePageNext();
+	}
+
+	@Override
+	public HashMap<String, String> initialize(Applet applet) {
+		HashMap<String, String> retval = super.initialize(applet);
+		
+		this.uploadStatus.initialize(applet);
+		
+		return retval;
+	}
+
+	@Override
+	public JComponent getUI() {
+		this.uploadStatus.start();
+		return super.getUI();
+	}
+
+	@Override
+	public void setFilesToUpload(File[] files) {
+		this.uploadStatus.setFilesToUpload(files);
 	}
 }
