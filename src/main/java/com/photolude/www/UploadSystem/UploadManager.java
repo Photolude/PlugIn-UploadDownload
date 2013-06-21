@@ -8,7 +8,10 @@ import javax.swing.BoxLayout;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.photolude.UI.wizard.AppletWizardContext;
 import com.photolude.UI.wizard.IWizard;
+import com.photolude.www.WebClient.IHttpSessionClient;
+import com.photolude.www.dialogs.ILogonSystem;
 
 /**
  * The upload wizard meant to be use on a webpage
@@ -43,14 +46,20 @@ public class UploadManager extends Applet {
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
 		
-		if(context.containsBean("Wizard"))
+		if(context.containsBean("Wizard") && context.containsBean("logonDialog"))
 		{
+			ILogonSystem logonSystem = (ILogonSystem)context.getBean("logonDialog");
+			logonSystem.setLogonPage(getParameter("logonPage"));
+			
+			IHttpSessionClient client = (IHttpSessionClient)context.getBean("httpClient");
+			client.setSessionCookies(getParameter("Server"), getParameter("token"), getParameter("auth"));
+			
 			this.wizard = (IWizard)context.getBean("Wizard");
 			this.invalidate();
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			this.add(this.wizard.getUI());
-			this.wizard.start(this, tokenOverrideMap);
+			this.wizard.start(new AppletWizardContext(this), tokenOverrideMap);
 		}
 		else
 		{

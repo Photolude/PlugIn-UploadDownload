@@ -1,5 +1,6 @@
 package com.photolude.www.WebClient;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -105,30 +106,46 @@ public class HttpSessionClient implements IHttpSessionClient {
 					fileName = header[0].getValue().split("=")[1];
 				}
 				
-				//
-				// Read the file to the disk
-				//
-				InputStream instream;
-				
-				instream = response.getEntity().getContent();
-			
-				OutputStream outstream = new FileOutputStream(destinationDirectory + "\\" + fileName);
-				if(instream != null)
+				if(fileName != null)
 				{
-					int count = 0;
-					byte[] buffer = new byte[4067];
+					//
+					// Read the file to the disk
+					//
+					InputStream instream;
 					
-					do
+					instream = response.getEntity().getContent();
+					File destination = new File(destinationDirectory + "\\" + fileName);
+					
+					if(destination.exists())
 					{
-						count = instream.read(buffer);
-						if(count > 0)
+						int onDuplicatCount = 1;
+						int extensionOffset = destination.getAbsolutePath().lastIndexOf('.');
+						String extension = destination.getAbsolutePath().substring(extensionOffset);
+						String fileWOExtension = destination.getAbsolutePath().substring(0, extensionOffset);
+						do
 						{
-							outstream.write(buffer, 0, count);
-						}
-					}while(count > 0);
+							destination = new File(fileWOExtension + "(" + onDuplicatCount++ + ")" + extension);
+						}while(destination.exists());
+					}
+					
+					OutputStream outstream = new FileOutputStream(destination.getAbsolutePath());
+					if(instream != null)
+					{
+						int count = 0;
+						byte[] buffer = new byte[4067];
+						
+						do
+						{
+							count = instream.read(buffer);
+							if(count > 0)
+							{
+								outstream.write(buffer, 0, count);
+							}
+						}while(count > 0);
+					}
+					outstream.close();
+					instream.close();
 				}
-				outstream.close();
-				instream.close();
 			}
 		} catch (ClientProtocolException e1) {
 			fileName = null;
@@ -244,5 +261,33 @@ public class HttpSessionClient implements IHttpSessionClient {
 	{
 		this.client = new DefaultHttpClient();
 		this.client.setCookieStore(this.cookieStore);
+	}
+	
+	public static JSONObject convertResponseToJSON(HttpResponse response)
+	{
+		JSONObject jsonResponse = null;
+		if(response != null && response.getStatusLine().getStatusCode() == 200)
+		{
+			try {
+				InputStream stream = response.getEntity().getContent();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(stream)); 
+				StringBuilder contents = new StringBuilder();
+				String line;
+				
+				while((line = reader.readLine()) != null)
+				{
+					contents.append(line);
+					contents.append("\n");
+				}
+			
+				jsonResponse = new JSONObject(contents.toString().trim());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return jsonResponse;
 	}
 }

@@ -1,6 +1,5 @@
 package com.photolude.UI.wizard;
 
-import java.applet.Applet;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -17,9 +16,9 @@ public class JWizard extends JComponent implements IWizardPageListener, ILoading
 	private Stack<IWizardPage> pageStack = new Stack<IWizardPage>();
 	private LoadingScreen loadingScreen;
 	
-	public void start(Applet applet, HashMap<String,String> tokenMap)
+	public void start(IWizardContext context, HashMap<String,String> tokenMap)
 	{
-		this.loadingScreen = new LoadingScreen(applet, tokenMap);
+		this.loadingScreen = new LoadingScreen(context, tokenMap);
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.loadingScreen.addListener(this);

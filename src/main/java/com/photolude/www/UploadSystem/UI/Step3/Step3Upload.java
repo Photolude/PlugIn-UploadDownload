@@ -1,5 +1,5 @@
 package com.photolude.www.UploadSystem.UI.Step3;
-import java.applet.Applet;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -7,9 +7,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 
 import com.photolude.UI.Common.UILabel;
+import com.photolude.UI.wizard.IWizardContext;
 import com.photolude.UI.wizard.WizardPageBase;
-import com.photolude.www.UploadSystem.UI.Step2.IUploadPage;
+import com.photolude.www.UploadSystem.IUploadPage;
 import com.photolude.www.WebClient.IHttpSessionClient;
+import com.photolude.www.dialogs.ILogonSystem;
 
 /**
  * Step 3 in the upload wizard, which uploads the files to the server
@@ -24,6 +26,9 @@ public class Step3Upload extends WizardPageBase implements IUploadStatusListener
 	
 	public void setHttpClient(IHttpSessionClient client){ this.uploadStatus.setHttpClient(client); }
 	public IHttpSessionClient getHttpClient(){ return this.uploadStatus.getHttpClient(); }
+	
+	public ILogonSystem getLogonSystem() { return this.uploadStatus.getLogonSystem(); }
+	public void setLogonSystem(ILogonSystem system) { this.uploadStatus.setLogonSystem(system); }
 	
 	/**
 	 * Initializes the object with the files to be uploaded 
@@ -50,10 +55,10 @@ public class Step3Upload extends WizardPageBase implements IUploadStatusListener
 	}
 
 	@Override
-	public HashMap<String, String> initialize(Applet applet) {
-		HashMap<String, String> retval = super.initialize(applet);
+	public HashMap<String, String> initialize(IWizardContext context) {
+		HashMap<String, String> retval = super.initialize(context);
 		
-		this.uploadStatus.initialize(applet);
+		this.uploadStatus.initialize(context);
 		
 		return retval;
 	}

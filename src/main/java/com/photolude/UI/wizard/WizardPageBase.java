@@ -1,6 +1,5 @@
 package com.photolude.UI.wizard;
 
-import java.applet.Applet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,10 +56,10 @@ public abstract class WizardPageBase extends JComponent implements IWizardPage {
 		}
 	}
 	
-	public HashMap<String, String> initialize(Applet applet) {
+	public HashMap<String, String> initialize(IWizardContext context) {
 		HashMap<String, String> retval = null;
 		
-		if(this.nextPage != null) retval = this.nextPage.initialize(applet);
+		if(this.nextPage != null) retval = this.nextPage.initialize(context);
 		
 		if(retval == null) retval = new HashMap<String, String>();
 		

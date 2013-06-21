@@ -1,6 +1,5 @@
 package com.photolude.www.UploadSystem.UI.Step2;
 
-import java.applet.Applet;
 import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
@@ -11,7 +10,9 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.photolude.UI.Common.LargeImageFolder;
+import com.photolude.UI.wizard.IWizardContext;
 import com.photolude.UI.wizard.WizardPageBase;
+import com.photolude.www.UploadSystem.IUploadPage;
 import com.photolude.www.UploadSystem.BusinessLogic.FileSystemLogic.Directory;
 import com.photolude.www.UploadSystem.UI.Step1.IPathNavigator;
 import com.photolude.www.UploadSystem.UI.Step1.Step1DriveRootSelection;
@@ -142,8 +143,8 @@ public class Step2SelectFolder extends WizardPageBase implements IMenuViewListen
 	}
 
 	@Override
-	public HashMap<String, String> initialize(Applet applet) {
-		HashMap<String, String> retval = super.initialize(applet);
+	public HashMap<String, String> initialize(IWizardContext context) {
+		HashMap<String, String> retval = super.initialize(context);
 		
 		if(!retval.containsKey(Step1DriveRootSelection.FOLDER_TOKEN)) retval.put(Step1DriveRootSelection.FOLDER_TOKEN, Step1DriveRootSelection.FOLDER_IMAGE_PATH);
 		

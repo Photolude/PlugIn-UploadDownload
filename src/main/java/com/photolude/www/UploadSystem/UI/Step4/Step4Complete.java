@@ -1,9 +1,5 @@
 package com.photolude.www.UploadSystem.UI.Step4;
 
-import java.applet.Applet;
-import java.applet.AppletContext;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 
 import javax.swing.Box;
@@ -11,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 
 import com.photolude.UI.Common.*;
+import com.photolude.UI.wizard.IWizardContext;
 import com.photolude.UI.wizard.WizardPageBase;
 import com.photolude.www.UploadSystem.Styles;
 
@@ -23,7 +20,6 @@ import com.photolude.www.UploadSystem.Styles;
 public class Step4Complete extends WizardPageBase implements Runnable {
 
 	private static final long serialVersionUID = 1L;
-	private AppletContext context;
 	private Thread thread;
 	
 	public Step4Complete()
@@ -40,14 +36,6 @@ public class Step4Complete extends WizardPageBase implements Runnable {
 	 */
 	private void NavigateToPictures()
 	{
-		try
-		{
-			this.context.showStatus("transitioning to view photos");
-			this.context.showDocument(new URL("/LoggedIn/ViewPhotos?Recent=true"));
-		}
-		catch(MalformedURLException e)
-		{
-		}
 	}
 
 	/**
@@ -65,10 +53,8 @@ public class Step4Complete extends WizardPageBase implements Runnable {
 	}
 
 	@Override
-	public HashMap<String, String> initialize(Applet applet) {
-		HashMap<String, String> retval = super.initialize(applet);
-		
-		this.context = applet.getAppletContext(); 
+	public HashMap<String, String> initialize(IWizardContext context) {
+		HashMap<String, String> retval = super.initialize(context);
 		
 		return retval;
 	}

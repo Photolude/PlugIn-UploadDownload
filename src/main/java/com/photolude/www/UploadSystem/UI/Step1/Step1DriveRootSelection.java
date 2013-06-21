@@ -1,6 +1,5 @@
 package com.photolude.www.UploadSystem.UI.Step1;
 
-import java.applet.Applet;
 import java.util.HashMap;
 
 import javax.swing.*;
@@ -10,6 +9,7 @@ import com.photolude.UI.Common.IFolderSelectionListener;
 import com.photolude.UI.Common.LargeImageFolder;
 import com.photolude.UI.Common.Seperator;
 import com.photolude.UI.Common.UILabel;
+import com.photolude.UI.wizard.IWizardContext;
 import com.photolude.UI.wizard.ImageDictionary;
 import com.photolude.UI.wizard.WizardPageBase;
 import com.photolude.www.UploadSystem.Styles;
@@ -54,8 +54,8 @@ public class Step1DriveRootSelection extends WizardPageBase implements IFolderSe
 	}
 
 	@Override
-	public HashMap<String, String> initialize(Applet applet) {
-		HashMap<String, String> retval = super.initialize(applet);
+	public HashMap<String, String> initialize(IWizardContext context) {
+		HashMap<String, String> retval = super.initialize(context);
 		
 		// Dynamically calculate size information
         Directory[] userDirectories = FileSystemAnalyzer.GetInstance().GetUserFolders();

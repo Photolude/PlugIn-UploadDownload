@@ -3,8 +3,27 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
  
+    <!-- Data Access System -->
     <bean id="httpClient" class="com.photolude.www.WebClient.HttpSessionClient"/>
     
+    <!-- Dialogs -->
+    <bean id="logonDialog" class="com.photolude.www.dialogs.LogonDialog">
+        <property name="httpClient">
+            <ref bean="httpClient"/>
+        </property>
+    </bean>
+    
+    <!-- Download System -->
+    <bean id="downloadLogic" class="com.photolude.www.DownloadSystem.FileDownloadBusinessLogic">
+        <property name="httpClient">
+            <ref bean="httpClient"/>
+        </property>
+        <property name="logonSystem">
+            <ref bean="logonDialog"/>
+        </property>
+    </bean>
+    
+    <!-- Upload System -->
     <bean id="Step4" class="com.photolude.www.UploadSystem.UI.Step4.Step4Complete"/>
     <bean id="Step3" class="com.photolude.www.UploadSystem.UI.Step3.Step3Upload">
         <property name="nextPage" >
@@ -12,6 +31,9 @@
         </property>
         <property name="httpClient">
             <ref bean="httpClient"/>
+        </property>
+        <property name="logonSystem">
+            <ref bean="logonDialog"/>
         </property>
     </bean>
     <bean id="Step2" class="com.photolude.www.UploadSystem.UI.Step2.Step2SelectFolder">

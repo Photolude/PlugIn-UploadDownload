@@ -1,10 +1,6 @@
 package com.photolude.www.UploadSystem.BusinessLogic.FileUploading;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,8 +9,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.JSONObject;
 
+import com.photolude.www.WebClient.HttpSessionClient;
 import com.photolude.www.WebClient.IHttpSessionClient;
 import com.photolude.www.WebClient.PlainTextResult;
+import com.photolude.www.dialogs.ILogonSystem;
 
 /**
  * This class performs the actual upload business logic
@@ -31,9 +29,9 @@ public class UploadFilesLogic {
 	private IHttpSessionClient client;
 	private String uploadPage;
 	private String statusPage;
-	private String logonPage;
 	private IUploadFilesListener listener;
 	private String userName;
+	private ILogonSystem logonSystem;
 	
 	private int onStep;
 	
@@ -73,11 +71,12 @@ public class UploadFilesLogic {
 	 * @param client the session based http client
 	 * @param listener a listener to events which occur during processing
 	 */
-	public UploadFilesLogic(String userName, String uploadPage, String statusPage, String logonPage, IHttpSessionClient client, IUploadFilesListener listener)
+	public UploadFilesLogic(String userName, String uploadPage, String statusPage, ILogonSystem logonSystem, IHttpSessionClient client, IUploadFilesListener listener)
 	{
 		this.uploadPage = uploadPage;
 		this.statusPage = statusPage;
-		this.logonPage = logonPage;
+		
+		this.logonSystem = logonSystem; 
 		
 		this.onStep = 0;
 		
@@ -127,7 +126,7 @@ public class UploadFilesLogic {
 			    switch(response.getStatusLine().getStatusCode())
 			    {
 			    case 200:
-			    	JSONObject json = convertResponseToJSON(response); 
+			    	JSONObject json = HttpSessionClient.convertResponseToJSON(response); 
 					
 					if(json != null)
 					{
@@ -140,7 +139,7 @@ public class UploadFilesLogic {
 			    	
 			    	break;
 			    case 302:
-			    	this.listener.RequireLogOn();
+			    	this.logonSystem.logon();
 			    	break;
 			    default:
 			    	break;
@@ -185,42 +184,6 @@ public class UploadFilesLogic {
 		}
 	}
 	
-	/**
-	 * Performs a log on with the specified values
-	 * @param userName the user name to logon with
-	 * @param password the password to logon with
-	 */
-	public void LogOn(String userName, String password)
-	{
-		JSONObject requestData = new JSONObject();
-		try {
-			requestData.put("email", userName);
-			requestData.put("password", password);
-			
-			HttpResponse response = this.client.postJSON(this.logonPage, requestData);
-			
-			JSONObject jsonResponse = convertResponseToJSON(response);
-			if(jsonResponse != null)
-			{
-				String result = jsonResponse.getString("result");
-				if(result == "Access Denied")
-				{
-					//TODO: Show message box
-				}
-				else if(result != "Succeeded")
-				{
-					//TODO: Show login failed
-				}
-			}
-			else
-			{
-				//TODO: Notify that could not connect to the server
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	private boolean UploadFile(File file)
 	{
 		
@@ -241,7 +204,7 @@ public class UploadFilesLogic {
 			boolean fileUploaded = true;
 			do
 			{
-				JSONObject json = convertResponseToJSON(client.uploadFile(uploadUri.toString(), file.getAbsolutePath())); 
+				JSONObject json = HttpSessionClient.convertResponseToJSON(client.uploadFile(uploadUri.toString(), file.getAbsolutePath())); 
 				
 				if(json != null)
 				{
@@ -299,34 +262,6 @@ public class UploadFilesLogic {
 		}
 		
 		return retval;
-	}
-	
-	private JSONObject convertResponseToJSON(HttpResponse response)
-	{
-		JSONObject jsonResponse = null;
-		if(response != null && response.getStatusLine().getStatusCode() == 200)
-		{
-			try {
-				InputStream stream = response.getEntity().getContent();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(stream)); 
-				StringBuilder contents = new StringBuilder();
-				String line;
-				
-				while((line = reader.readLine()) != null)
-				{
-					contents.append(line);
-					contents.append("\n");
-				}
-			
-				jsonResponse = new JSONObject(contents.toString().trim());
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return jsonResponse;
 	}
 	
 	private void SetStatus(String newStatus, int onStep)

@@ -11,9 +11,4 @@ public interface IUploadFilesListener {
 	 * Notifies the listener that there has been a status change
 	 */
 	public void StatusChanged();
-	
-	/**
-	 * Notifies the listener that the user must re-log on
-	 */
-	public void RequireLogOn();
 }

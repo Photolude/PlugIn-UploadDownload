@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.photolude.www</groupId>
   <artifactId>FileUploadDownload</artifactId>
-  <version>1.1.32</version>
+  <version>1.1.38</version>
   <name>Photolude Upload and Download</name>
   <description>Webpage plugin allowing bulk upload and download of photos</description>
   <repositories>
@@ -88,28 +88,34 @@
                         <classpathPrefix>lib/</classpathPrefix>
                     </manifest>
                     <manifestEntries>
-						<!-- 
-						<Trusted-Only>false</Trusted-Only>
+						<Trusted-Only>true</Trusted-Only>
 						<Trusted-Library>true</Trusted-Library>
-						 -->
 					</manifestEntries>
                 </archive>
             </configuration>
         </plugin>
-        <plugin>
-              <artifactId>maven-dependency-plugin</artifactId>
-              <executions>
-                  <execution>
-                      <phase>install</phase>
-                      <goals>
-                          <goal>copy-dependencies</goal>
-                      </goals>
-                      <configuration>
-                          <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                      </configuration>
-                  </execution>
-              </executions>
-          </plugin>
+          <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-shade-plugin</artifactId>
+			<version>1.2.2</version>
+			<executions>
+			  <execution>
+				<phase>package</phase>
+				<goals>
+				  <goal>shade</goal>
+				</goals>
+				<configuration>
+				  <artifactSet>
+					<excludes>
+					  <exclude>junit:junit</exclude>
+					  <exclude>jmock:jmock</exclude>
+					  <exclude>xml-apis:xml-apis</exclude>
+					</excludes>
+				  </artifactSet>
+				</configuration>
+			  </execution>
+			</executions>
+		  </plugin>
     </plugins>
   </build>
 </project>

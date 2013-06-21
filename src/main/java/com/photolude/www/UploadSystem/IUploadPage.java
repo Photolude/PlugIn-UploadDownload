@@ -1,4 +1,4 @@
-package com.photolude.www.UploadSystem.UI.Step2;
+package com.photolude.www.UploadSystem;
 
 import java.io.File;
 

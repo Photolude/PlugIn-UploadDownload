@@ -1,14 +1,14 @@
 package com.photolude.www.DownloadSystem;
 
 import java.applet.Applet;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.photolude.www.UploadSystem.UI.Loading.ProgressBar;
-import com.photolude.www.WebClient.HttpSessionClient;
+import com.photolude.www.dialogs.ILogonSystem;
 
 /**
  * This object is an applet designed to be used by a webpage to download
@@ -17,14 +17,9 @@ import com.photolude.www.WebClient.HttpSessionClient;
  * @author Nikody Keating
  *
  */
-public class FileDownloadManagerSystem extends Applet implements Runnable {
-	private int[] imageIds = null;
-	private String destination = null;
-	private String source = null;
-	private String cookie = null;
-	private String auth = null;
+public class FileDownloadManagerSystem extends Applet implements IDownloadEventListener {
+	private String logonPage = null;
 	private ProgressBar progressBar;
-	private Thread thread;
 	
 	/**
 	 * 
@@ -37,80 +32,62 @@ public class FileDownloadManagerSystem extends Applet implements Runnable {
 
 	public void init()
 	{
+		
 		BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		this.setLayout(layout);
 		
 		//
-		// Find the destination folder
+		// Setup layout and start download
 		//
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		int dialogReturnValue = fileChooser.showOpenDialog(this);
-		if(dialogReturnValue == JFileChooser.APPROVE_OPTION)
+		this.progressBar = new ProgressBar();
+		progressBar.SetTotalSteps(1);
+		progressBar.SetOnStep(0);
+		this.add(this.progressBar);
+		
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:/applicationContext.xml");
+		
+		if(context.containsBean("downloadLogic") && context.containsBean("logonDialog"))
 		{
-			this.destination = fileChooser.getSelectedFile().getAbsolutePath();
-			//
-			// Parse parameters into type safe values
-			//
-			String imageIdsString = getParameter("ImageIds");
-			this.source = getParameter("Source");
-			this.cookie = getParameter("Cookie");
-			this.auth = getParameter("Auth");
+			ILogonSystem logon = (ILogonSystem)context.getBean("logonDialog");
+			IDownloadBusinessLogic logic = (IDownloadBusinessLogic)context.getBean("downloadLogic");
 			
-			if(imageIdsString != null)
+			logon.setLogonPage(getParameter("logonPage"));
+			
+			//
+			// Find the destination folder
+			//
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int dialogReturnValue = fileChooser.showOpenDialog(this);
+			if(dialogReturnValue == JFileChooser.APPROVE_OPTION)
 			{
-				String[] imageIdsParts = imageIdsString.split(",");
-				imageIds = new int[imageIdsParts.length];
-				
-				for(int i = 0; i < imageIds.length; i++)
+				this.logonPage = getParameter("logonPage");
+				if(this.logonPage != null &&
+					logic.initialize(getParameter("ImageIds"), 
+								 fileChooser.getSelectedFile().getAbsolutePath(), 
+								 getParameter("domain"), 
+								 getParameter("token"), 
+								 getParameter("auth"), 
+								 getParameter("downloadPage")))
 				{
-					imageIds[i] = Integer.parseInt(imageIdsParts[i]);
+					progressBar.SetTotalSteps(logic.getTotalImages() + 1);
+					progressBar.SetOnStep(0);
+					
+					logic.addListener(this);
+					logic.start();
 				}
 			}
-			
-			//
-			// Setup layout and start download
-			//
-			progressBar = new ProgressBar();
-			progressBar.SetTotalSteps(imageIds.length + 1);
-			progressBar.SetOnStep(0);
-			
-			this.add(progressBar);
-			
-			this.invalidate();
-			this.doLayout();
-			this.thread = new Thread(this);
-			this.thread.start();
 		}
+		
+		this.invalidate();
+		this.doLayout();
+		
+		context.close();
 	}
 
 	@Override
-	public void run() {
-		Log log = LogFactory.getLog(FileDownloadManagerSystem.class);
-		log.info("Starting to download " + imageIds.length + " photos\n");
-		
-		
-		for(int i = 0; i < imageIds.length; i++)
-		{
-			log.info("Downloading " + i + " of " + imageIds.length);
-			progressBar.SetStatus("Downloading " + (i + 1) + " of " + (imageIds.length));
-			progressBar.SetOnStep(i);
-			
-			HttpSessionClient client = new HttpSessionClient();
-			client.setSessionCookies(this.cookie, this.auth, this.source);
-			String fileName = client.downloadImage("https://" + source + "/Content/ImageRender.ashx?imageId=" + imageIds[i] + "&large=true&Save=true", this.destination);
-			
-			if(fileName != null)
-			{
-				log.info("File:" + fileName);
-			}
-			else
-			{
-				log.error("A problem occured while downloading\n");
-			}
-		}
-		
-		progressBar.SetStatus("Complete");
-		progressBar.SetOnStep(imageIds.length + 1);
+	public void statusUpdated(String status, int step) {
+		this.progressBar.SetOnStep(step);
+		this.progressBar.SetStatus(status);
 	}
 }

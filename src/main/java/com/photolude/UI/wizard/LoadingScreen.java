@@ -1,6 +1,5 @@
 package com.photolude.UI.wizard;
 
-import java.applet.Applet;
 import java.awt.Image;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class LoadingScreen extends JComponent implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private ProgressBar progressBar;
 	private HashMap<String, String> tokenOverrideMap;
-	private Applet applet;
+	private IWizardContext context;
 	private List<ILoadingListener> listeners = new LinkedList<ILoadingListener>();
 	private IWizardPage firstPage;
 
@@ -36,9 +35,9 @@ public class LoadingScreen extends JComponent implements Runnable {
 	 * @param applet the applet the loader is attached to
 	 * @param m_server the server to download the images from
 	 */
-	public LoadingScreen(Applet applet, HashMap<String,String> tokenOverrideMap)
+	public LoadingScreen(IWizardContext context, HashMap<String,String> tokenOverrideMap)
 	{
-		this.applet = applet;
+		this.context = context;
 		this.tokenOverrideMap = tokenOverrideMap;
 		
 		this.progressBar = new ProgressBar();
@@ -67,7 +66,7 @@ public class LoadingScreen extends JComponent implements Runnable {
 	 */
 	@Override
 	public void run() {
-		HashMap<String, String> itemsToLoad = this.firstPage.initialize(this.applet);
+		HashMap<String, String> itemsToLoad = this.firstPage.initialize(this.context);
 		this.progressBar.SetTotalSteps((itemsToLoad.size() + 2) * 2);
 		Set<String> keys = itemsToLoad.keySet();
 		int nOnStep = 0;
@@ -100,7 +99,6 @@ public class LoadingScreen extends JComponent implements Runnable {
 						System.out.println("Loading: " + resourcePath);
 						
 						image = ImageIO.read(new URL(resourcePath));
-						//Image image = this.m_applet.getImage(new URL(this.m_itemsToLoad.get(item)));
 						
 						image.getGraphics();
 						
