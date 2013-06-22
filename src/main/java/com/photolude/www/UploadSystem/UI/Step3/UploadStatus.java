@@ -101,7 +101,7 @@ public class UploadStatus extends Container implements Runnable, IUploadFilesLis
 	public void run() {
 		this.validate();
 		
-		this.logic.UploadFiles();
+		this.logic.uploadFiles();
 		
 		//
 		// Notify upload complete
@@ -116,7 +116,7 @@ public class UploadStatus extends Container implements Runnable, IUploadFilesLis
 	 * Gets invoked when the upload status changes
 	 */
 	@Override
-	public void StatusChanged() {
+	public void statusChanged() {
 		this.repaint();
 	}
 }

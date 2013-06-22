@@ -2,8 +2,10 @@ package com.photolude.www.UploadSystem.BusinessLogic.FileUploading;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.utils.URIBuilder;
@@ -32,6 +34,12 @@ public class UploadFilesLogic {
 	private IUploadFilesListener listener;
 	private String userName;
 	private ILogonSystem logonSystem;
+	private List<File> failedUploads = new ArrayList<File>();
+	public File[] getFailedUploads()
+	{ 
+		File[] buffer = new File[this.failedUploads.size()];
+		return (File[]) this.failedUploads.toArray(buffer); 
+	}
 	
 	private int onStep;
 	
@@ -90,7 +98,7 @@ public class UploadFilesLogic {
 	/**
 	 * Upload the files to the server
 	 */
-	public void UploadFiles()
+	public void uploadFiles()
 	{
 		this.finishedUploads = 1;
 		
@@ -122,8 +130,15 @@ public class UploadFilesLogic {
 						.addParameter("fileLength", "" + fManifest.length())
 						.addParameter("token", this.uploadToken);
 				
-				HttpResponse response = client.uploadFile(uri.toString(), fManifest.getAbsolutePath()); 
-			    switch(response.getStatusLine().getStatusCode())
+				HttpResponse response = client.uploadFile(uri.toString(), fManifest.getAbsolutePath());
+				int statusCode = 302;
+				
+				if(response != null)
+				{
+					statusCode = response.getStatusLine().getStatusCode();
+				}
+				
+			    switch(statusCode)
 			    {
 			    case 200:
 			    	JSONObject json = HttpSessionClient.convertResponseToJSON(response); 
@@ -160,31 +175,46 @@ public class UploadFilesLogic {
 		//
 		for(int i = 0; i < this.files.length; i++)
 		{
+			String newStatus = "Uploading " + this.finishedUploads + " of " + (this.files.length + 1);
+			
+			if(this.finishedUploads == 1)
+			{
+				newStatus = "Preparing reliable secure upload";
+			}
+			
+			setStatus(newStatus, this.finishedUploads);
+			
 			File file = this.files[i];
 			if(file.length() > 0)
 			{
-				String newStatus = "Uploading " + this.finishedUploads + " of " + (this.files.length + 1);
-				
-				if(this.finishedUploads == 1)
-				{
-					newStatus = "Preparing reliable secure upload";
-				}
-				
-				SetStatus(newStatus, this.finishedUploads);
 				
 				//
 				// Loop until the file is uploaded
 				//
-				while(!UploadFile(file))
+				while(!uploadFile(file))
 				{
 				}
 				
 				this.finishedUploads++;
 			}
+			else
+			{
+				this.failedUploads.add(file);
+				this.finishedUploads++;
+			}
 		}
+		
+		String newStatus = "Uploading Complete";
+		
+		if(this.finishedUploads == 1)
+		{
+			newStatus = "Preparing reliable secure upload";
+		}
+		
+		setStatus(newStatus, this.finishedUploads);
 	}
 	
-	private boolean UploadFile(File file)
+	private boolean uploadFile(File file)
 	{
 		
 		boolean retval = false;
@@ -264,13 +294,13 @@ public class UploadFilesLogic {
 		return retval;
 	}
 	
-	private void SetStatus(String newStatus, int onStep)
+	private void setStatus(String newStatus, int onStep)
 	{
 		if(!this.uploadStatus.equals(newStatus) || onStep != this.onStep)
 		{
 			this.uploadStatus = newStatus;
 			this.onStep = onStep;
-			this.listener.StatusChanged();
+			this.listener.statusChanged();
 		}
 	}
 }

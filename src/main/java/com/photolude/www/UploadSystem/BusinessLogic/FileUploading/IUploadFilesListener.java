@@ -10,5 +10,5 @@ public interface IUploadFilesListener {
 	/**
 	 * Notifies the listener that there has been a status change
 	 */
-	public void StatusChanged();
+	public void statusChanged();
 }
